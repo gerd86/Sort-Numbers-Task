@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sort Values</title>
+</head>
+<body>
+    <div id="content">
+        {% block content %}
+            <h1 name="show">Enter a list of numbers</h1>
+            <form action="{{ url_for("index") }}" method="POST">
+                <p>
+                    <textarea name="message" rows="3" cols="50">
+                    </textarea>
+                </p>
+                <p><select id="sort-order" name="sort-order">
+                    <option value="descending">
+                            Descending
+                        </option>
+                        <option value="ascending">
+                            Ascending
+                        </option>
+                    </select>
+                </p>
+                <p><input name="submit" type="submit" value="Submit"></p>
+            </form>
+
+            <h2>Sort Results</h2>
+            <br>
+            <div>
+                {{sorted_list}}
+            </div>
+            <br>
+            <div>
+                {{ sort_order }}
+            </div>
+            <br>
+            <div>
+                <p> {{ time_of_sort }} </p>
+            </div>
+            <form action="/to_json/" method="POST">
+                <button type="submit" name="jsonBtn">
+                    Export DB to JSON
+                </button>
+            </form>
+            <div>
+                <p>{{ success_msg }}</p>
+            </div>
+        {% endblock %}
+    </div>
+</body>
+</html>
