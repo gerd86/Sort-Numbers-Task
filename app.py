@@ -2,11 +2,12 @@ import json
 import timeit
 import collections
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect
 
 from sort_number import Sort, Sort_DB
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'GDtfDCFYjD'
 
 @app.route('/', methods=["POST", "GET"])
 def index():
@@ -15,6 +16,10 @@ def index():
     db.create_tb()
     if request.method == "POST":
         form_data = request.form
+        valid_exp = all(x.isnumeric() or x.isspace() for x in form_data['message'])
+        if not valid_exp:
+            flash('Please enter only numeric characters!')
+            return redirect('/')
         print(form_data)
         # init sort class with form data
         num_list = Sort(form_data['message'])
@@ -46,8 +51,9 @@ def to_json():
         outfile.write(j)
     return render_template('index.html', success_msg='JSON File has successfully exported!')
 
-# @app.route('/result', methods=["POST", "GET"]):
-# def result():
+
+
+
 
 if __name__ == '__main__':
     app.run()

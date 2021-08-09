@@ -27,6 +27,10 @@
 
             <h2>Sort Results</h2>
             <br>
+            {% for mesg in get_flashed_messages() %}
+                <h1>{{ mesg }}</h1>
+            {% endfor %}
+            <br>
             <div>
                 {{sorted_list}}
             </div>
