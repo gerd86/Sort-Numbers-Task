@@ -11,3 +11,4 @@ implementation of this strategy might not have been executed as effectively as p
 
 The project assumes that the user is able to run python on their local machine and
 install the requisite dependencies, which are included in [_requirements.txt_](requirements.txt).
+

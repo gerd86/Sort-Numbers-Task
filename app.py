@@ -4,19 +4,23 @@ import collections
 
 from flask import Flask, render_template, request, flash, redirect
 
-from sort_number import Sort, Sort_DB
+from sort_number import Sort
+from sort_db import Sort_DB
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'GDtfDCFYjD'
 
+db = Sort_DB("sorted_lists.s3db")
+db.create_tb()
+
 @app.route('/', methods=["POST", "GET"])
 def index():
-    global db
-    db = Sort_DB("sorted_lists.s3db")
-    db.create_tb()
+
     if request.method == "POST":
         form_data = request.form
-        valid_exp = all(x.isnumeric() or x.isspace() for x in form_data['message'])
+        # TODO Write a validation expression that accepts negative numbers
+        # TODO Should return warning if message doesn't contain any numbers
+        valid_exp = all(x.isdigit() or x.isspace() for x in form_data['message'])
         if not valid_exp:
             flash('Please enter only numeric characters!')
             return redirect('/')
@@ -35,6 +39,7 @@ def index():
         return render_template('index.html', sorted_list=sorted_string, sort_order=form_data['sort-order'].title(),
                                time_of_sort=f'Sorted in {time_of_op} seconds.')
     return render_template('index.html')
+
 @app.route('/to_json/', methods=['POST', 'GET'])
 def to_json():
     rows = db.fetch_records()
